@@ -12,6 +12,8 @@ const resolvers = {
         id: '1',
         name: 'cloudic',
         avatar: 'http://mongodb.github.io/node-mongodb-native/img/logo-mongodb-header.png',
+        history: [{ word: 'a', time: new Date().getTime() }],
+        notebook: [{ word: 'b', time: new Date().getTime() }],
       }
     }
   },
@@ -25,6 +27,12 @@ const resolvers = {
     },
     avatar({ avatar }) {
       return avatar
+    },
+    history({ history }) {
+      return history
+    },
+    notebook({ notebook }) {
+      return notebook
     }
   },
 }

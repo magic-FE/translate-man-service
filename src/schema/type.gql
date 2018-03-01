@@ -10,4 +10,15 @@ type User {
   id: ID!
   name: String
   avatar: URL
+  # 翻译历史
+  history: [Search]!
+  # 生词本
+  notebook: [Search]!
 }
+
+type Search {
+  word: String
+  time: Date
+}
+
+
