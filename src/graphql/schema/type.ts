@@ -1,4 +1,4 @@
-scalar Date
+const type = `scalar Date
 
 scalar URL
 
@@ -19,6 +19,7 @@ type User {
 type Search {
   word: String
   time: Date
-}
+}`
 
+export default type
 

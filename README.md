@@ -1,12 +1,6 @@
 # translate-man-service
 service for translate man
 
-# preparation
-first you need to install [mongo](https://www.mongodb.com/) then open mongod.
-```shell
-$ mongod
-```
-
 this project use [apollo](https://www.apollographql.com/), client should use graphql to fetch data.
 
 # dev
