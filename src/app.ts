@@ -1,13 +1,10 @@
 import Koa from 'koa'
 import Router from 'koa-router'
 import bodyParser from 'koa-bodyparser'
-import { graphqlKoa, graphiqlKoa } from 'apollo-server-koa'
+import cors from 'kcors'
+import jwt from 'koa-jwt'
 import mongoose from 'mongoose'
-import dotenv from 'dotenv'
-import schema from './graphql/schema/schema'
-
-// 从 .env 文件加载环境变量 包括数据库地址，用户名，密码等
-dotenv.config()
+import router from './router'
 
 const mongoUrl = `mongodb://${process.env.MONGOURL}`
 
@@ -22,13 +19,9 @@ mongoose.connect(mongoUrl, {
 
 const app = new Koa()
 
-const router = new Router()
-router.all('/graphql', graphqlKoa({ schema }))
-router.get('/graphiql', graphiqlKoa({
-  endpointURL: '/graphql',
-}))
-
+app.use(cors())
 app.use(bodyParser({ enableTypes: ['json'] }))
+app.use(jwt({ secret: process.env.JWTSECRET }).unless({ path: [/^\/login/, /^\/graphiql/]}))
 app.use(router.routes())
 app.use(router.allowedMethods())
 

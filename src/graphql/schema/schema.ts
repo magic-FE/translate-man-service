@@ -2,38 +2,23 @@ import fs from 'fs'
 import path from 'path'
 import { makeExecutableSchema } from 'graphql-tools'
 import typeDefs from './type'
-import UserModel from '../../models/user'
-
-UserModel.find((err, docs) => {
-  if (err) throw err
-
-  console.log(docs)
-})
-
-type Word = {
-  word: string
-  time: Date
-}
-
-export type User = {
-  id: string
-  name: string
-  avatar: string
-  history: [Word]
-  notebook: [Word]
-}
+import UserModel, { User } from '../../models/user'
 
 const resolvers = {
   Query: {
-    user() {
-      return {
-        id: '1',
-        name: 'cloudic',
-        avatar: 'http://mongodb.github.io/node-mongodb-native/img/logo-mongodb-header.png',
-        history: [{ word: 'a', time: new Date() }],
-        notebook: [{ word: 'b', time: new Date() }],
-      } as User
+    getUser(_:any, { token }: User) {
+
     }
+  },
+
+  Mutation: {
+    login: async (_:any, { email, password }: User) => {
+      try {
+        return { email: 'xx' }
+      } catch(e) {
+
+      }
+    },
   },
 
   User: {
@@ -46,12 +31,6 @@ const resolvers = {
     avatar({ avatar }: User) {
       return avatar
     },
-    history({ history }: User) {
-      return history
-    },
-    notebook({ notebook }: User) {
-      return notebook
-    }
   },
 }
 
