@@ -6,7 +6,7 @@ import token from '../utils/token';
 const saltRounds = 10
 
 const getHmac = () => {
-  const hmac = crypto.createHmac('sha256', process.env.JWTKEY)
+  const hmac = crypto.createHmac('sha256', process.env.JWTKEY.toString())
   hmac.update(Date.now().toString())
   return hmac.digest('hex')
 }
