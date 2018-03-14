@@ -26,7 +26,7 @@ router.post('/login', async (ctx, next) => {
           }
         } else {
           ctx.status = 401
-          ctx.body = "用户名密码错误"
+          ctx.body = '用户名密码错误'
         }
       } else {
         // 用户不存在 自动注册用户
@@ -51,7 +51,7 @@ router.post('/login', async (ctx, next) => {
       ctx.status = 400
       ctx.body = '需要 email 和 password 字段'
     }
-  } catch(e) {
+  } catch (e) {
     throw e
   }
 })

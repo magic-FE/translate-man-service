@@ -89,7 +89,7 @@ UserSchema.pre('save', async function(next: (v?: any) => any) {
     const hash = await bcrypt.hash(this.password, salt)
     this.password = hash
     return next()
-  } catch(e) {
+  } catch (e) {
     return next(e)
   }
 })
