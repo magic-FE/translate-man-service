@@ -30,12 +30,14 @@ export interface User extends  IUser {
   createAt: string
   updateAt: string
   isActivate: boolean
+  notebook: object[]
   token?: string
 }
 
 export interface IUserModel extends Model<IUser> {
   checkToken(password: string): boolean
   findByEmail(email: string): User
+  addNotebook(id: string, notebook: any): any
 }
 
 const UserSchema = new Schema({
@@ -74,10 +76,14 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  notebook: {
+    type: Array,
+    default: [],
+  },
 })
 
 UserSchema.pre('save', async function(next: (v?: any) => any) {
-  try{
+  try {
     if (!this.isModified('password')) return next()
     const salt = await bcrypt.genSalt(saltRounds)
     const hash = await bcrypt.hash(this.password, salt)
@@ -96,16 +102,24 @@ UserSchema.statics.checkToken = async function(token: any) {
   const secret = getHmac()
   const user = await this.findOneAndUpdate({ _id: token.id }, { appSecret: secret })
   if (token.secret === user.appSecret) {
-      user.appSecret = secret
-      return user
+    user.appSecret = secret
+    return user
   } else {
-      throw new Error('token验证失败！')
+    throw new Error('token验证失败！')
   }
 }
 
 UserSchema.statics.findByEmail = async function(email: string) {
   const user = await this.findOne({ email })
   return user
+}
+
+UserSchema.statics.addNotebook = async function(id: string, notebook: any) {
+  const user = await this.findById(id)
+  if (user.notebook) {
+    user.notebook.push(notebook)
+  }
+  return await this.updateOne({ _id: user._id }, { notebook: user.notebook })
 }
 
 const UserModel: IUserModel = model<IUser, IUserModel>('user', UserSchema)

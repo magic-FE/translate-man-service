@@ -1,6 +1,4 @@
 import Router from 'koa-router'
-import { graphqlKoa, graphiqlKoa } from 'apollo-server-koa'
-import schema from './graphql/schema/schema'
 import UserModel, { IUser, User } from './models/user'
 import token from './utils/token'
 
@@ -58,9 +56,22 @@ router.post('/login', async (ctx, next) => {
   }
 })
 
-router.all('/graphql', graphqlKoa({ schema }))
-router.get('/graphiql', graphiqlKoa({
-  endpointURL: '/graphql',
-}))
+router.post('/notebook', async ctx => {
+  const user = await token.checkToken(ctx, UserModel, true)
+  const word = ctx.request.body
+  await UserModel.addNotebook(user.id, word)
+  ctx.body = JSON.stringify('ok')
+})
+
+router.get('/userinfo', async ctx => {
+  const user: User = await token.checkToken(ctx, UserModel, true)
+  ctx.body = {
+    id: user._id,
+    name: user.name,
+    notebook: user.notebook,
+    token: token.signToke(<User>user),
+  }
+})
+
 
 export default router

@@ -19,7 +19,7 @@ async function checkToken(ctx: any, userModel: any, getUser: any) {
         if (getUser) {
           return user
         } else {
-          return signToke(user)
+          return ''
         }
       } else {
         ctx.throw(501, 'token信息异常')
@@ -30,8 +30,8 @@ async function checkToken(ctx: any, userModel: any, getUser: any) {
 }
 
 type Token = {
-  signToke(user: User): Object
-  checkToken(ctx: any, userModel: any, getUser: any): Object
+  signToke(user: User): any
+  checkToken(ctx: any, userModel: any, getUser: any): any
 }
 
 const token: Token = {
